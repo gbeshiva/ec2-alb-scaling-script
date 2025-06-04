@@ -88,8 +88,8 @@ resource "aws_lb_listener" "alb_listener" {
 resource "aws_launch_template" "ec2_launch_template" {
   name = "slgs-web-server"
 
-  image_id      = "ami-0f535a71b34f2d44a" //Copy the ami id from aws console
-  instance_type = "t2.micro"
+  image_id      = var.ami_id //Copy the ami id from aws console
+  instance_type = var.instance_type
 
   network_interfaces {
     associate_public_ip_address = false
