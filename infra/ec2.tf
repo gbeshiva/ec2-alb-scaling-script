@@ -1,6 +1,6 @@
 #1. Security Group for ALB (Internet -> ALB)
 resource "aws_security_group" "alb_sg" {
-  name        = "yt-alb-sg"
+  name        = "slgs-alb-sg"
   description = "Security Group for Application Load Balancer"
 
   vpc_id = aws_vpc.custom_vpc.id
@@ -20,13 +20,13 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = {
-    Name = "yt-alb-sg"
+    Name = "slgs-alb-sg"
   }
 }
 
 # Security Group for EC2 Instances (ALB -> EC2)
 resource "aws_security_group" "ec2_sg" {
-  name        = "yt-ec2-sg"
+  name        = "slgs-ec2-sg"
   description = "Security Group for Web Server Instances"
 
   vpc_id = aws_vpc.custom_vpc.id
@@ -46,13 +46,13 @@ resource "aws_security_group" "ec2_sg" {
   }
 
   tags = {
-    Name = "yt-ec2-sg"
+    Name = "slgs-ec2-sg"
   }
 }
 
 #2. Application Load Balancer
 resource "aws_lb" "app_lb" {
-  name               = "yt-app-lb"
+  name               = "slgs-app-lb"
   load_balancer_type = "application"
   internal           = false
   security_groups    = [aws_security_group.alb_sg.id]
@@ -62,12 +62,12 @@ resource "aws_lb" "app_lb" {
 
 # Target Group for ALB
 resource "aws_lb_target_group" "alb_ec2_tg" {
-  name     = "yt-web-server-tg"
+  name     = "slgs-web-server-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.custom_vpc.id
   tags = {
-    Name = "yt-alb_ec2_tg"
+    Name = "slgs-alb_ec2_tg"
   }
 }
 
@@ -80,13 +80,13 @@ resource "aws_lb_listener" "alb_listener" {
     target_group_arn = aws_lb_target_group.alb_ec2_tg.arn
   }
   tags = {
-    Name = "yt-alb-listener"
+    Name = "slgs-alb-listener"
   }
 }
 
 #3. Launch Template for EC2 Instances
 resource "aws_launch_template" "ec2_launch_template" {
-  name = "yt-web-server"
+  name = "slgs-web-server"
 
   image_id      = "ami-0f535a71b34f2d44a" //Copy the ami id from aws console
   instance_type = "t2.micro"
@@ -101,14 +101,14 @@ resource "aws_launch_template" "ec2_launch_template" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name = "yt-ec2-web-server"
+      Name = "slgs-ec2-web-server"
     }
   }
 }
 
 # Auto Scaling Group
 resource "aws_autoscaling_group" "ec2_asg" {
-  name                = "yt-web-server-asg"
+  name                = "slgs-web-server-asg"
   desired_capacity    = 2
   min_size            = 2
   max_size            = 3
