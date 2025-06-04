@@ -8,13 +8,6 @@ resource "aws_vpc" "custom_vpc" {
   }
 }
 
-//2. create subnet
-variable "vpc_availability_zones" {
-  type        = list(string)
-  description = "Availability Zones"
-  default     = ["ap-south-1a", "ap-south-1b"]
-}
-
 resource "aws_subnet" "public_subnet" {
   vpc_id            = aws_vpc.custom_vpc.id
   count             = length(var.vpc_availability_zones)
