@@ -1,8 +1,15 @@
+variable "region_name" {
+  description = "default vpc id"
+  type        = string
+  default     = "ap-south-1"
+}
+
 variable "ami_id" {
   description = "default vpc id"
   type        = string
   default     = "ami-0f535a71b34f2d44a"
 }
+
 variable "instance_type" {
   description = "default vpc id"
   type        = string
